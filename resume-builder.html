@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIspire - Resume Builder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .resume-preview {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            min-height: 800px;
+        }
+        .form-section {
+            background-color: #ffffff;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm py-4">
+        <div class="max-w-6xl mx-auto px-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-bold text-blue-600">AIspire</a>
+            <div>
+                <a href="templates.html" class="text-gray-600 hover:text-blue-600 mr-4">
+                    <i class="fas fa-arrow-left mr-2"></i> Back
+                </a>
+                <a href="index.html" class="text-gray-600 hover:text-blue-600">
+                    <i class="fas fa-home"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-center mb-8">Resume Builder</h1>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Form Section -->
+            <div class="form-section p-6">
+                <form id="resumeForm">
+                    <!-- Personal Information -->
+                    <h2 class="text-xl font-semibold mb-4 text-blue-600 border-b pb-2">Personal Information</h2>
+                    <div class="space-y-4 mb-6">
+                        <div>
+                            <label class="block text-gray-700 mb-1">Full Name</label>
+                            <input type="text" name="name" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-1">LinkedIn Profile</label>
+                            <input type="url" name="linkedin" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-1">Email</label>
+                            <input type="email" name="email" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-1">Phone Number</label>
+                            <input type="tel" name="phone" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+
+                    <!-- Professional Summary -->
+                    <h2 class="text-xl font-semibold mb-4 text-blue-600 border-b pb-2">Professional Summary</h2>
+                    <div class="mb-6">
+                        <label class="block text-gray-700 mb-1">Summary (2-3 sentences)</label>
+                        <textarea name="summary" rows="3" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                    </div>
+
+                    <!-- Education -->
+                    <h2 class="text-xl font-semibold mb-4 text-blue-600 border-b pb-2">Education</h2>
+                    <div class="space-y-4 mb-6" id="educationFields">
+                        <div class="education-entry space-y-4">
+                            <div>
+                                <label class="block text-gray-700 mb-1">Institution</label>
+                                <input type="text" name="education[0][institution]" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-gray-700 mb-1">Degree</label>
+                                    <input type="text" name="education[0][degree]" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 mb-1">Field of Study</label>
+                                    <input type="text" name="education[0][field]" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-gray-700 mb-1">Start Date</label>
+                                    <input type="month" name="education[0][start]" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 mb-1">End Date</label>
+                                    <input type="month" name="education[0][end]" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" onclick="addEducationField()" class="text-blue-600 hover:text-blue-800 mb-6">
+                        <i class="fas fa-plus mr-1"></i> Add Another Education
+                    </button>
+
+                    <!-- Work Experience -->
+                    <h2 class="text-xl font-semibold mb-4 text-blue-600 border-b pb-2">Work Experience</h2>
+                    <div class="space-y-4 mb-6" id="experienceFields">
+                        <div class="experience-entry space-y-4">
+                            <div>
+                                <label class="block text-gray-700 mb-1">Company</label>
+                                <input type="text" name="experience[0][company]" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-1">Position</label>
+                                <input type="text" name="experience[0][position]" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-gray-700 mb-1">Start Date</label>
+                                    <input type="month" name="experience[0][start]" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
+                                <div>
+                                    <label class="block text-gray-700 mb-1">End Date</label>
+                                    <input type="month" name="experience[0][end]" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 mb-1">Responsibilities (bullet points)</label>
+                                <textarea name="experience[0][responsibilities]" rows="3" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" onclick="addExperienceField()" class="text-blue-600 hover:text-blue-800 mb-6">
+                        <i class="fas fa-plus mr-1"></i> Add Another Experience
+                    </button>
+
+                    <!-- Skills & Other Sections -->
+                    <h2 class="text-xl font-semibold mb-4 text-blue-600 border-b pb-2">Skills & Achievements</h2>
+                    <div class="space-y-4 mb-6">
+                        <div>
+                            <label class="block text-gray-700 mb-1">Professional Certifications (comma separated)</label>
+                            <textarea name="certifications" rows="2" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-1">Academic Achievements (comma separated)</label>
+                            <textarea name="achievements" rows="2" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-1">Positions of Responsibility</label>
+                            <textarea name="positions" rows="2" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-1">Technical Skills (comma separated)</label>
+                            <textarea name="skills" rows="2" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-gray-700 mb-1">Interests</label>
+                            <textarea name="interests" rows="2" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="button" onclick="generateResume()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full text-lg transition duration-300">
+                            Generate Resume <i class="fas fa-file-download ml-2"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Preview Section -->
+            <div class="resume-preview p-8" id="resumePreview">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold">Your Resume Preview</h2>
+                    <p class="text-gray-600">Fill out the form to see your resume here</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to add education fields
+        function addEducationField() {
+            const container = document.getElementById('educationFields');
+            const count = container.children.length;
+            const newField = document.createElement('div');
+            newField.className = 'education-entry space-y-4 mt-6';
+            newField.innerHTML = `
+                <div>
+                    <label class="block text-gray-700 mb-1">Institution</label>
+                    <input type="text" name="education[${count}][institution]" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-gray-700 mb-1">Degree</label>
+                        <input type="text" name="education[${count}][degree]" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-1">Field of Study</label>
+                        <input type="text" name="education[${count}][field]" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-gray-700 mb-1">Start Date</label>
+                        <input type="month" name="education[${count}][start]" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-1">End Date</label>
+                        <input type="month" name="education[${count}][end]" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+                <button type="button" onclick="this.parentNode.remove()" class="text-red-500 hover:text-red-700 text-sm">
+                    <i class="fas fa-trash mr-1"></i> Remove this education
+                </button>
+            `;
+            container.appendChild(newField);
+        }
+
+        // Function to add experience fields
+        function addExperienceField() {
+            const container = document.getElementById('experienceFields');
+            const count = container.children.length;
+            const newField = document.createElement('div');
+            newField.className = 'experience-entry space-y-4 mt-6';
+            newField.innerHTML = `
+                <div>
+                    <label class="block text-gray-700 mb-1">Company</label>
+                    <input type="text" name="experience[${count}][company]" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-1">Position</label>
+                    <input type="text" name="experience[${count}][position]" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-gray-700 mb-1">Start Date</label>
+                        <input type="month" name="experience[${count}][start]" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 mb-1">End Date</label>
+                        <input type="month" name="experience[${count}][end]" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-gray-700 mb-1">Responsibilities (bullet points)</label>
+                    <textarea name="experience[${count}][responsibilities]" rows="3" class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                </div>
+                <button type="button" onclick="this.parentNode.remove()" class="text-red-500 hover:text-red-700 text-sm">
+                    <i class="fas fa-trash mr-1"></i> Remove this experience
+                </button>
+            `;
+            container.appendChild(newField);
+        }
+
+        // Function to generate resume preview
+        function generateResume() {
+            const form = document.getElementById('resumeForm');
+            const formData = new FormData(form);
+            const preview = document.getElementById('resumePreview');
+            
+            // Convert form data to object
+            const data = {};
+            for (let [key, value] of formData.entries()) {
+                if (key.includes('[')) {
+                    // Handle nested objects (education and experience)
+                    const matches = key.match(/(\w+)\[(\d+)\]\[(\w+)\]/);
+                    if (matches) {
+                        const [_, field, index, subfield] = matches;
+                        if (!data[field]) data[field] = [];
+                        if (!data[field][index]) data[field][index] = {};
+                        data[field][index][subfield] = value;
+                    }
+                } else {
+                    data[key] = value;
+                }
+            }
+
+            // Generate HTML for preview
+            let html = `
+                <div class="bg-white p-8 shadow-md">
+                    <div class="text-center mb-8">
+                        <h1 class="text-3xl font-bold">${data.name || 'Your Name'}</h1>
+                        <div class="flex justify-center space-x-4 mt-2 text-gray-600">
+                            ${data.email ? `<span>${data.email}</span>` : ''}
+                            ${data.phone ? `<span>• ${data.phone}</span>` : ''}
+                            ${data.linkedin ? `<span>• <a href="${data.linkedin}" class="text-blue-600">LinkedIn</a></span>` : ''}
+                        </div>
+                    </div>
+
+                    ${data.summary ? `
+                    <div class="mb-6">
+                        <h2 class="text-xl font-semibold border-b pb-1 mb-2">Professional Summary</h2>
+                        <p>${data.summary.replace(/\n/g, '<br>')}</p>
+                    </div>
+                    ` : ''}
+
+                    ${data.education && data.education[0]?.institution ? `
+                    <div class="mb-6">
+                        <h2 class="text-xl font-semibold border-b pb-1 mb-2">Education</h2>
+                        ${data.education.map(edu => edu.institution ? `
+                            <div class="mb-4">
+                                <div class="flex justify-between">
+                                    <h3 class="font-semibold">${edu.institution}</h3>
+                                    <span class="text-gray-600">${edu.start ? formatDate(edu.start) : ''} - ${edu.end ? formatDate(edu.end) : 'Present'}</span>
+                                </div>
+                                ${edu.degree ? `<p>${edu.degree}${edu.field ? ` in ${edu.field}` : ''}</p>` : ''}
+                            </div>
+                        ` : '').join('')}
+                    </div>
+                    ` : ''}
+
+                    ${data.experience && data.experience[0]?.company ? `
+                    <div class="mb-6">
+                        <h2 class="text-xl font-semibold border-b pb-1 mb-2">Work Experience</h2>
+                        ${data.experience.map(exp => exp.company ? `
+                            <div class="mb-4">
+                                <div class="flex justify-between">
+                                    <h3 class="font-semibold">${exp.position || 'Position'} at ${exp.company}</h3>
+                                    <span class="text-gray-600">${exp.start ? formatDate(exp.start) : ''} - ${exp.end ? formatDate(exp.end) : 'Present'}</span>
+                                </div>
+                                ${exp.responsibilities ? `
+                                    <ul class="list-disc pl-5 mt-2">
+                                        ${exp.responsibilities.split('\n').filter(Boolean).map(item => `<li>${item}</li>`).join('')}
+                                    </ul>
+                                ` : ''}
+                            </div>
+                        ` : '').join('')}
+                    </div>
+                    ` : ''}
+
+                    ${data.skills ? `
+                    <div class="mb-6">
+                        <h2 class="text-xl font-semibold border-b pb-1 mb-2">Skills</h2>
+                        <p>${data.skills.split(',').map(skill => `<span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">${skill.trim()}</span>`).join('')}</p>
+                    </div>
+                    ` : ''}
+
+                    ${data.certifications || data.achievements || data.positions ? `
+                    <div class="mb-6">
+                        <h2 class="text-xl font-semibold border-b pb-1 mb-2">Achievements</h2>
+                        ${data.certifications ? `
+                            <h3 class="font-semibold mt-2">Certifications</h3>
+                            <ul class="list-disc pl-5">
+                                ${data.certifications.split(',').filter(Boolean).map(item => `<li>${item.trim()}</li>`).join('')}
+                            </ul>
+                        ` : ''}
+                        ${data.achievements ? `
+                            <h3 class="font-semibold mt-2">Academic Achievements</h3>
+                            <ul class="list-disc pl-5">
+                                ${data.achievements.split(',').filter(Boolean).map(item => `<li>${item.trim()}</li>`).join('')}
+                            </ul>
+                        ` : ''}
+                        ${data.positions ? `
+                            <h3 class="font-semibold mt-2">Positions of Responsibility</h3>
+                            <ul class="list-disc pl-5">
+                                ${data.positions.split('\n').filter(Boolean).map(item => `<li>${item}</li>`).join('')}
+                            </ul>
+                        ` : ''}
+                    </div>
+                    ` : ''}
+
+                    ${data.interests ? `
+                    <div class="mb-6">
+                        <h2 class="text-xl font-semibold border-b pb-1 mb-2">Interests</h2>
+                        <p>${data.interests.replace(/\n/g, '<br>')}</p>
+                    </div>
+                    ` : ''}
+                </div>
+            `;
+
+            preview.innerHTML = html;
+        }
+
+        // Helper function to format dates
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+        }
+    </script>
+</body>
+</html>
